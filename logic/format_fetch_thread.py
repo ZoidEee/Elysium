@@ -19,8 +19,6 @@ class FormatFetchThread(QThread):
         super().__init__()
         self.url = url
         self.yt = YouTube(url)
-        self.audio_formats = {}
-        self.video_formats = {}
 
     def run(self):
         """
@@ -37,13 +35,20 @@ class FormatFetchThread(QThread):
         Args:
             audio_streams (iterable): An iterable of audio streams.
         """
+        self.audio_formats = {
+            "MP4": set(),
+            "WebM": set()
+        }
+
         for stream in audio_streams:
             audio_format = stream.mime_type.split('-')[0].split("/")[1]
             audio_quality = stream.abr
 
-            if audio_format not in self.audio_formats:
-                self.audio_formats[audio_format] = set()
-            self.audio_formats[audio_format].add(audio_quality)
+            if audio_format == "mp4":
+                self.audio_formats["MP4"].add(audio_quality)
+            elif audio_format == "webm":
+                self.audio_formats["WebM"].add(audio_quality)
+
 
     def populate_video_formats(self, video_streams):
         """
