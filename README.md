@@ -33,3 +33,6 @@ The Elysium application can be further customized by modifying the code in the p
 - ui/download_media_dialog.py: This file contains the implementation of the download dialog, including the UI elements and the download functionality.
 
 You can customize the appearance, add new features, or modify the existing functionality by editing the code in these files.
+
+## Version History 
+- 0.0.1 -> first upload of the project; redone multiple times prior to try out PEP8 formatting
