@@ -12,6 +12,7 @@ Elysium is a desktop application built using PyQt6 that allows users to download
 The Elysium application requires the following dependencies:
 - Python 3.x
 - PyQt6
+- PyQt6-WebEngine
 - pytube
 
 ## Usage
