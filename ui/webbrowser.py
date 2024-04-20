@@ -1,6 +1,5 @@
-from PyQt6.QtCore import QUrl, Qt, QSize, QThread, pyqtSignal
+from PyQt6.QtCore import QUrl, Qt, QSize
 from PyQt6.QtGui import QIcon, QAction
-from PyQt6.QtNetwork import QNetworkAccessManager, QNetworkRequest
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from PyQt6.QtWidgets import (
     QMainWindow, QVBoxLayout, QWidget, QToolBar, QLabel, QSizePolicy,
@@ -121,14 +120,16 @@ class WebBrowser(QMainWindow):
 
     def handle_url_change(self, url):
         """
-        This function is triggered when the URL of the web view changes. It checks if the new URL is not on the YouTube.com domain or not using HTTPS.
-        If the URL does not meet the criteria, it loads the default YouTube.com URL.
-        This ensures that the web browser stays within the YouTube.com domain and uses a secure HTTPS connection.
+        This function is triggered when the URL of the web view changes. It checks if the new URL is not on the
+        YouTube.com domain or not using HTTPS. If the URL does not meet the criteria, it loads the default
+        YouTube.com URL. This ensures that the web browser stays within the YouTube.com domain and uses a secure
+        HTTPS connection.
         """
         # Check if the URL is not on the YouTube.com domain or not using HTTPS
         if not (url.host().endswith("youtube.com") and url.scheme() == "https"):
             # Load the default YouTube.com URL
             self.web_view.load(QUrl("https://www.youtube.com"))
+
     def update_url_box(self, url):
         """
         This function is triggered when the web view's URL changes.
@@ -136,6 +137,7 @@ class WebBrowser(QMainWindow):
         This allows the user to see the current URL being displayed in the web browser.
         """
         self.url_box.setText(url.toString())
+
     def download_media_dialog(self):
         current_url = self.web_view.url().toString()
         dialog = DownloadMediaDialog(self, current_url)

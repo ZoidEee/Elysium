@@ -3,6 +3,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QDialog, QGridLayout, QLabel, QLineEdit, QCheckBox, QComboBox, QProgressBar, QPushButton
 from logic.format_fetch_thread import FormatFetchThread
 
+
 class DownloadMediaDialog(QDialog):
     """
     A dialog window for downloading media from a given URL.
@@ -11,6 +12,7 @@ class DownloadMediaDialog(QDialog):
     allows the user to select the desired format, and then downloads the
     media to the appropriate directory.
     """
+
     def __init__(self, parent=None, url=None):
         """
         Initialize the DownloadMediaDialog.
@@ -64,9 +66,9 @@ class DownloadMediaDialog(QDialog):
         self.audio_file_cmb.currentIndexChanged.connect(self.update_audio_qualities)
         self.audio_file_cmb.setEnabled(False)
 
-        self.audio_quaility_l = QLabel("Audio Quality: ")
-        self.audio_quaility_cmb = QComboBox()
-        self.audio_quaility_cmb.setEnabled(False)
+        self.audio_quality_l = QLabel("Audio Quality: ")
+        self.audio_quality_cmb = QComboBox()
+        self.audio_quality_cmb.setEnabled(False)
 
         self.video_file_l = QLabel("File Type: ")
         self.video_file_cmb = QComboBox()
@@ -101,8 +103,8 @@ class DownloadMediaDialog(QDialog):
         layout.addWidget(self.audio_format_cb, 2, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.audio_file_l, 3, 1, 1, 2, Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.audio_file_cmb, 3, 2, 1, 2, Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.audio_quaility_l, 4, 1, 1, 2, Qt.AlignmentFlag.AlignCenter)
-        layout.addWidget(self.audio_quaility_cmb, 4, 2, 1, 2, Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.audio_quality_l, 4, 1, 1, 2, Qt.AlignmentFlag.AlignCenter)
+        layout.addWidget(self.audio_quality_cmb, 4, 2, 1, 2, Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.video_format_cb, 5, 0, 1, 2, Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.video_file_l, 6, 1, 1, 2, Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.video_file_cmb, 6, 2, 1, 2, Qt.AlignmentFlag.AlignCenter)
@@ -131,7 +133,7 @@ class DownloadMediaDialog(QDialog):
             audio_formats (dict): A dictionary of available audio formats and their qualities.
         """
         self.audio_file_cmb.clear()
-        self.audio_quaility_cmb.clear()
+        self.audio_quality_cmb.clear()
         self.audio_file_cmb.addItems(sorted(audio_formats.keys()))
         self.update_audio_qualities(0)
 
@@ -143,8 +145,9 @@ class DownloadMediaDialog(QDialog):
             index (int): The index of the selected audio format in the combobox.
         """
         selected_format = self.audio_file_cmb.currentText()
-        self.audio_quaility_cmb.clear()
-        self.audio_quaility_cmb.addItems(sorted([str(q) for q in self.format_fetch_thread.audio_formats[selected_format]]))
+        self.audio_quality_cmb.clear()
+        self.audio_quality_cmb.addItems(
+            sorted([str(q) for q in self.format_fetch_thread.audio_formats[selected_format]]))
 
     def populate_video_formats(self, video_formats):
         """
@@ -181,8 +184,8 @@ class DownloadMediaDialog(QDialog):
         """
         self.audio_file_l.setEnabled(checked)
         self.audio_file_cmb.setEnabled(checked)
-        self.audio_quaility_l.setEnabled(checked)
-        self.audio_quaility_cmb.setEnabled(checked)
+        self.audio_quality_l.setEnabled(checked)
+        self.audio_quality_cmb.setEnabled(checked)
 
     def toggle_video_format(self, checked):
         """
@@ -221,13 +224,15 @@ class DownloadMediaDialog(QDialog):
 
         if self.audio_format_cb.isChecked():
             audio_format = self.audio_file_cmb.currentText()
-            audio_quality = self.audio_quaility_cmb.currentText()
-            self.download_audio(os.path.join(audio_dir, f"{filename}.{audio_format.lower()}"), audio_format, audio_quality)
+            audio_quality = self.audio_quality_cmb.currentText()
+            self.download_audio(os.path.join(audio_dir, f"{filename}.{audio_format.lower()}"), audio_format,
+                                audio_quality)
 
         if self.video_format_cb.isChecked():
             video_format = self.video_file_cmb.currentText()
             video_quality = self.video_quality_cmb.currentText()
-            self.download_video(os.path.join(video_dir, f"{filename}.{video_format.lower()}"), video_format, video_quality)
+            self.download_video(os.path.join(video_dir, f"{filename}.{video_format.lower()}"), video_format,
+                                video_quality)
 
         self.accept()
 
@@ -252,5 +257,6 @@ class DownloadMediaDialog(QDialog):
             video_format (str): The selected video format.
             video_quality (str): The selected video quality.
         """
-        stream = self.format_fetch_thread.yt.streams.filter(resolution=video_quality, file_extension=video_format.lower()).first()
+        stream = self.format_fetch_thread.yt.streams.filter(resolution=video_quality,
+                                                            file_extension=video_format.lower()).first()
         stream.download(output_path=os.path.dirname(save_path), filename=os.path.basename(save_path))

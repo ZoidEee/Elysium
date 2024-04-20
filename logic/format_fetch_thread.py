@@ -1,6 +1,7 @@
 from PyQt6.QtCore import QThread, pyqtSignal
 from pytube import YouTube
 
+
 class FormatFetchThread(QThread):
     """
     A thread that fetches the audio and video formats for a given YouTube URL.
@@ -46,7 +47,7 @@ class FormatFetchThread(QThread):
 
     def populate_video_formats(self, video_streams):
         """
-        Populates the video formats dictionary.
+        Populates the video format's dictionary.
 
         Args:
             video_streams (iterable): An iterable of video streams.
