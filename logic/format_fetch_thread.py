@@ -1,6 +1,5 @@
 from PyQt6.QtCore import QThread, pyqtSignal
-from pytube import YouTube
-
+from pytubefix import YouTube
 
 class FormatFetchThread(QThread):
     """
